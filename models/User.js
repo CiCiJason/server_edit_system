@@ -13,28 +13,21 @@ var UserSchema = new Schema({
         type: Boolean,
         default: false
     },
+    //创建时间
     createTime: {
         type: Date,
         default: Date.now
     },
+    //上次登录时间
     lastLoginTime: {
         type: Date,
         default: Date.now
     },
+    //浏览次数
     count:{
         type:Number,
         default:0
     }
-
-
-    // body: String,
-    // comments: [{ body: String, date: Date }],
-    // date: { type: Date, default: Date.now },
-    // hidden: Boolean,
-    // meta: {
-    //     votes: Number,
-    //     favs: Number
-    // }
 
 });
 

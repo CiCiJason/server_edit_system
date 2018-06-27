@@ -3,7 +3,10 @@ var Schema = mongoose.Schema;
 
 var DocumentSchema = new Schema({
     //文档类型
-    type: String,
+    type: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TypeOfNews'
+    },
     //主标题
     title: String,
     //副标题
@@ -26,7 +29,12 @@ var DocumentSchema = new Schema({
         default:0
     },
     //发布时间
-    time: {
+    releaseTime: {
+        type: Date,
+        default: Date.now
+    },
+    //创建时间
+    createTime: {
         type: Date,
         default: Date.now
     },
@@ -40,17 +48,6 @@ var DocumentSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
-
-
-    // body: String,
-    // comments: [{ body: String, date: Date }],
-    // date: { type: Date, default: Date.now },
-    // hidden: Boolean,
-    // meta: {
-    //     votes: Number,
-    //     favs: Number
-    // }
-
 });
 
 module.exports = mongoose.model('Document', DocumentSchema);
