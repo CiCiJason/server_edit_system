@@ -3,41 +3,29 @@ var bcrypt = require('bcrypt');
 const saltRounds=10;
 
 //返回错误信息
+
 const errfun=(err)=>{
     console.log(err);
     return err;
 }
 
-//密码加密
-const hashPassword=(password)=>{
-    bcrypt.hash(password,saltRounds,(err,hash)=>{
-        if(err){ errfun(err) };
-        return hash;
-    })
-}
-
-//check密码
-const checkPassword=(password,hash)=>{
-    bcrypt.compare(password,hash,(err,res)=> {
-        if(err){ errfun(err) };
-        return res;
-    })
-}
-
-
 
 //注册
-exports.SignUp = (data, type, callback) => {
+
+exports.SignUp = (data,callback) => {
     User.findOne({accountname:data.accountname},(err,user)=>{
         if(err){ errfun(err) };
         if(user){
             //存在，就抛出提示
-            return {code:'1',msg:'账户名已经注册'}
+            callback({code:'3',msg:'账户名已经注册，请重新输入'});
         }else{
-            const newUser=new User({accountname:data.accountname,password:hashPassword(data.password)});
-            newUser.save((err,user)=>{
-                if(err) { errfun(err) };
-                return user;
+            //密码加密
+            bcrypt.hash(data.password,saltRounds,(err,hash)=>{
+                var newUser = new User({ accountname: data.accountname, password: hash });
+                    newUser.save(function(err,user){
+                        if(err) {errfun(err)}
+                        callback({code:'0',msg:'注册成功'});
+                    });
             });
         }
     })
@@ -45,22 +33,33 @@ exports.SignUp = (data, type, callback) => {
 
 
 //登录
-exports.SignIn=(data)=>{
+
+exports.SignIn=(data,callback)=>{
     User.findOne({accountname:data.accountname},(err,user)=>{
         if(err){errfun(err)}
         if(user){
-            const result=checkPassword(data.password,user.password);
-            if(result){
-                return {code:'0',msg:'登录成功'};
-            }else{
-                return {code:'1',msg:'用户名或者密码不正确'};
-            }
+            bcrypt.compare(data.password,user.password,(err,res)=>{
+                if(err){errfun(err)}
+                if(res){
+                    callback({code:'0',msg:'登录验证成功'})
+                }else{
+                    callback({code:'2',msg:'用户名或密码不正确'})                }
+            })
         }else{
-            return {code:'2',msg:'用户名不存在'};
+            callback({code:'2',msg:'用户名或密码不正确'}) 
         }
-    })
+    });
 }
 
+
+//获取除admin之外的所有用户列表
+
+exports.list=(data,callback)=>{
+    User.find({isAdmin:false},'accountname createTime',function (err,users) {
+        if(err){errfun(err)};
+        callback(users);
+    })
+}
 
 
 
