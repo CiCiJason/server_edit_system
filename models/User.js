@@ -3,11 +3,20 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
     //账号名
-    accountname: String,
+    accountname: {
+        type:String,
+        default:''
+    },
     //用户名
-    username: String,
+    username: {
+        type:String,
+        default:''
+    },
     //密码
-    password: String,
+    password: {
+        type:String,
+        default:''
+    },
     //是否是管理员
     isAdmin: {
         type: Boolean,
@@ -21,14 +30,13 @@ var UserSchema = new Schema({
     //上次登录时间
     lastLoginTime: {
         type: Date,
-        default: Date.now
+        default: Date.now 
     },
     //浏览次数
     count:{
         type:Number,
         default:0
     }
-
 });
 
 module.exports = mongoose.model('User', UserSchema);
