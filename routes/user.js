@@ -28,4 +28,18 @@ router.get('/list',function (req,res,next) {
   });
 });
 
+//删除用户
+router.delete('/delete',function (req,res,next) {
+  UserService.delete(req.query,function (data) {
+    return res.json(data);
+  })
+});
+
+//重置密码
+router.put('/resetpwd',function(req,res,next){
+  UserService.resetpwd(req.body,function (data) {
+    return res.json(data);
+  })
+})
+
 module.exports = router;
