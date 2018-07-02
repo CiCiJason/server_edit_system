@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 });
 
 
-//获取除admin之后的，所有用户列表
+//获取所有类型列表
 router.get('/list',function (req,res,next) {
   TypeService.list(req.query,function(data){
     return res.json(data);

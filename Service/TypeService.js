@@ -71,9 +71,17 @@ exports.delete=(data,callback)=>{
 
 //列举出文章所有的类型
 
-exports.list=(data,callback)=>{    
-    Type.find({},function(err,doc){
-        if(err){errfun(err)}
-        callback(doc);
-    })
+exports.list=(data,callback)=>{ 
+    if(data.all=='all'){
+        Type.find({},function(err,doc){
+            if(err){errfun(err)}
+            callback(doc);
+        })
+    }
+    if(data.all=='typename'){
+        Type.find({},'typename',function(err,doc){
+            if(err){errfun(err)}
+            callback(doc);
+        })
+    }
 }

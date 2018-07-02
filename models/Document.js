@@ -3,14 +3,11 @@ var Schema = mongoose.Schema;
 
 var DocumentSchema = new Schema({
     //文档类型
-    type: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'TypeOfNews'
-    },
+    typename:String,
     //主标题
     title: String,
     //副标题
-    subtitle: String,
+    subtitle: {type:String,default:''},
     //文章正文
     content: String,
     //是否是草稿
