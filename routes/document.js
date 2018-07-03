@@ -3,7 +3,7 @@ var router = express.Router();
 const DocumentService=require('../Service/DocumentService');
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' })
+  res.render('index', { title: '欢迎光临' })
 })
 
 
@@ -16,8 +16,13 @@ router.get('/list',function (req,res,next) {
 
 
 //保存文档
+// router.post('/add',function (req,res,next) {
+//   DocumentService.create(req.body,function (data) {
+//     return res.json(data);
+//   })
+// })
 router.post('/add',function (req,res,next) {
-  DocumentService.create(req.body,function (data) {
+  DocumentService.create(req,function (data) {
     return res.json(data);
   })
 })

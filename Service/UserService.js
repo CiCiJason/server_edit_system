@@ -66,7 +66,7 @@ exports.list=(data,callback)=>{
 //删除用户
 
 exports.delete=(data,callback)=>{
-    User.findByIdAndRemove(data.id,function(err,doc){
+    User.findByIdAndRemove(data._id,function(err,doc){
         if(err){errfun(err)}
         if(doc){
             //doc返回的是查找到的一条需要删除的数据
@@ -83,7 +83,7 @@ exports.delete=(data,callback)=>{
 exports.resetpwd=(data,callback)=>{
     bcrypt.hash(md5('123456'),saltRounds,(err,hash)=>{
         if(err){errfun(err)}
-        User.findByIdAndUpdate(data.id,{password:hash},function(err1,user){
+        User.findByIdAndUpdate(data._id,{password:hash},function(err1,user){
             if(err1){errfun(err1)}
             if(user){
                 callback({code:'0',msg:'重置成功'});

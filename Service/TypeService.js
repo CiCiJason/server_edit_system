@@ -34,13 +34,13 @@ const errfun=(err)=>{
 //编辑已有类型的名字
 
 exports.update=(data,callback)=> {
-    Type.findById(data.id,function(err,doc){
+    Type.findById(data._id,function(err,doc){
         if(err) {errfun(err)}
         if(doc){
             if(doc.typename==data.newtype){
                 callback({code:'1',msg:'新编辑文档类型名称与原名称一致，请重新输入'});
             }else{
-                Type.findByIdAndUpdate(data.id, {$set: { typename: data.newtype }},{new:true}, (err,doc) => { 
+                Type.findByIdAndUpdate(data._id, {$set: { typename: data.newtype }},{new:true}, (err,doc) => { 
                     if(err){console.log(err);}
                     if(doc){
                         callback({code:'0',msg:'修改成功'});
@@ -57,7 +57,7 @@ exports.update=(data,callback)=> {
 //删除已有的文章类型
 
 exports.delete=(data,callback)=>{
-    Type.findByIdAndRemove(data.id,function(err,doc){
+    Type.findByIdAndRemove(data._id,function(err,doc){
         if(err){errfun(err)}
         if(doc){
             //doc返回的是查找到的一条需要删除的数据
