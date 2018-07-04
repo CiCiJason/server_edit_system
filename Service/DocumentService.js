@@ -106,7 +106,7 @@ exports.create = (req, callback) => {
                     content: data.content,
                     releaseTime: data.releaseTime,
                     draft: data.draft,
-                    accountname: req.session.accountname
+                    // accountname: req.session.accountname
                 }).save(function (err, newdoc) {
                     if (err) { errfun(err) }
                     if (newdoc) {
