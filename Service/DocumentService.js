@@ -122,11 +122,38 @@ exports.create = (req, callback) => {
 
 //列举出所有文章
 
-exports.list = (data, callback) => {
+exports.listdraft = (data, callback) => {
     Document.find( data , 'title typename releaseTime count top', { sort: {  'top': -1 ,'releaseTime': -1} }, function (err, doc) {
         if (err) { errfun(err) }
         callback(doc);
     });
+}
+
+//加入分页之后
+exports.list=(data,callback)=>{
+    //设置每页列出文章数
+    const limit=1;
+    const callbackObj={};
+    Document.count(JSON.parse(data.query),function (err,counts) {
+        if(err){errfun(err)}
+        if(counts==0){
+            const doc=[];
+            callbackObj.counts=0;
+            callbackObj.count=1;        
+            callbackObj.documents=doc;
+            callback(callbackObj);
+        }else{
+            const page=JSON.parse(data.page).page||1;
+            const skip=limit*page-limit;
+            Document.find(JSON.parse(data.query),'title typename releaseTime count top',{sort: {  'top': -1 ,'releaseTime': -1},skip:skip,limit:limit},function(err1,doc1){
+                if(err1){errfun(err1)}
+                callbackObj.counts=counts;
+                callbackObj.count=Math.ceil(counts/limit);  
+                callbackObj.documents=doc1;
+                callback(callbackObj);
+            });
+        }
+    })
 }
 
 

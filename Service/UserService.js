@@ -35,14 +35,18 @@ exports.SignUp = (data,callback) => {
 
 //编辑更改类型名称
 
-exports.SignIn=(data,callback)=>{
+exports.SignIn=(req,callback)=>{
+    const data=req.body;
     User.findOne({accountname:data.accountname},(err,user)=>{
         if(err){errfun(err)}
         if(user){
-            bcrypt.compare(data.password,user.password,(err,res)=>{
+            bcrypt.compare(data.password,user.password,(err,result)=>{
                 if(err){errfun(err)}
-                if(res){
-                    callback({code:'0',msg:'登录验证成功'})
+                if(result){
+                    req.session._id=user.id;
+                    req.session.accountname=user.accountname;
+                    req.session.logined=true;
+                    callback({code:'0',msg:'登录验证成功',_id:user.id,accountname:user.accountname,logined:true})
                 }else{
                     callback({code:'2',msg:'用户名或密码不正确'})                }
             })

@@ -9,9 +9,15 @@ router.get('/', function(req, res, next) {
 
 //获取文档列表
 router.get('/list',function (req,res,next) {
-  DocumentService.list(req.query,function(data){
-    return res.json(data);
-  })
+  if(req.query.draft&&req.query.draft=='true'){
+    DocumentService.listdraft(req.query,function(data){
+      return res.json(data);
+    })
+  }else{
+    DocumentService.list(req.query,function(data){
+      return res.json(data);
+    })
+  }
 })
 
 

@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 //用户登录
 router.post('/login',function (req,res,next) {
-  UserService.SignIn(req.body,function(data){
+  UserService.SignIn(req,function(data){
     return res.json(data);
   });
 });
