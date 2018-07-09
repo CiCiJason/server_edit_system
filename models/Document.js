@@ -5,7 +5,10 @@ var DocumentSchema = new Schema({
     title: String,
     subtitle: {type:String,default:''},
     content: String,
-    typename:String,
+    typenameid:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Type'
+    },
     //是否是草稿
     draft:{
         type:Boolean,
@@ -27,14 +30,20 @@ var DocumentSchema = new Schema({
         default: Date.now
     },
     //创建人
-    accountname:String,
+    accountname:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     //创建时间
     createTime: {
         type: Date,
         default: Date.now
     },
     //上次修改人
-    lastEditPerson: String,
+    lastEditPerson: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     //上一次修改时间
     lastEditTime: {
         type: Date,

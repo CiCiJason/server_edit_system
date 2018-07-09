@@ -19,9 +19,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
     secret: 'cici900806',
-    name: 'editsystem', //这里的name值得是cookie的name，默认cookie的name是：connect.sid
+    name: 'editSystem', //这里的name值得是cookie的name，默认cookie的name是：connect.sid
     //cookie: { maxAge: 1000 * 60 * 60 * 24 }, //设置maxAge是1天，即1天后session和相应的cookie失效过期
-    cookie: { maxAge: 1000 * 60 * 60 * 24 },//1天之后失效
+    cookie: { maxAge: 1000 * 60 * 60 * 6 },//6小时之后失效
 
     resave: false, // 是否每次都重新保存会话，建议false
     saveUninitialized: true, // 是否自动保存未初始化的会话，建议false

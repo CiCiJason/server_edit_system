@@ -17,14 +17,14 @@ router.get('/list',function (req,res,next) {
 
 //添加新的类型
 router.post('/add',function (req,res,next) {
-  TypeService.create(req.body,function (data) {
+  TypeService.create(req,function (data) {
     return res.json(data);
   })
 });
 
 //编辑类型名称
 router.put('/edit',function (req,res,next) {
-  TypeService.update(req.body,function (data) {
+  TypeService.update(req,function (data) {
     return res.json(data);
   });
 });

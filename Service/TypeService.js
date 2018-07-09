@@ -12,13 +12,14 @@ const errfun = (err) => {
 /**
  * 先判断是否已经存在这样的文章类型，不存在的话，再创建
  */
-exports.create = (data, callback) => {
+exports.create = (req, callback) => {
+    const data=req.body;
     Type.findOne({ typename: data.typename }, function (err, doc) {
         if (err) { errfun(err) }
         if (doc) {
             return { code: '1', msg: '新建文档类型已存在，请重新输入' }
         } else {
-            new Type({ typename: data.typename }).save(function (err, newdoc) {
+            new Type({ typename: data.typename ,accountname:req.session._id}).save(function (err, newdoc) {
                 if (err) { errfun(err) }
                 if (newdoc) {
                     callback({ code: '0', msg: '创建成功' });
@@ -33,19 +34,23 @@ exports.create = (data, callback) => {
 
 //编辑已有类型的名字
 
-exports.update = (data, callback) => {
+exports.update = (req, callback) => {
+    const data=req.body;
     Type.findById(data._id, function (err, doc) {
         if (err) { errfun(err) }
         if (doc) {
             if (doc.typename == data.newtype) {
                 callback({ code: '1', msg: '新编辑文档类型名称与原名称一致，请重新输入' });
             } else {
-                Type.findByIdAndUpdate(data._id, { $set: { typename: data.newtype, lastEditTime: new Date().toISOString() } }, { new: true }, (err, doc) => {
+                Type.findByIdAndUpdate(data._id, { $set: { typename: data.newtype, lastEditTime: new Date().toISOString() ,editaccountname:req.session._id} }, { new: true }, (err, doc) => {
                     if (err) { console.log(err); }
                     if (doc) {
                         callback({ code: '0', msg: '修改成功' });
                     }
                 });
+                // doc.update({typename: data.newtype, lastEditTime: new Date().toISOString() ,editaccountname:req.session._id},(err1,newdoc)=>{
+                //     callback({ code: '0', msg: '修改成功' });
+                // });
             }
         } else {
             callback({ code: '2', msg: '不存在这样的文档类型，请重新输入' });
