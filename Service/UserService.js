@@ -40,10 +40,13 @@ exports.SignIn = (req, callback) => {
     User.findOne({ accountname: data.accountname }, (err, user) => {
         if (err) { errfun(err) }
         if (user) {
-            bcrypt.compare(data.password, user.password, (err, result) => {
-                if (err) { errfun(err) }
+            bcrypt.compare(data.password, user.password, (err1, result) => {
+                if (err1) { errfun(err) }
                 if (result) {
-                    callback({ code: '0', msg: '登录验证成功', _id: user.id, accountname: user.accountname, logined: true ,admin:user.admin})
+                    user.update({ lastLoginTime: new Date().toISOString() }, (err2, resp) => {
+                        if (err2) errfun(err2)
+                    });
+                    callback({ code: '0', msg: '登录验证成功', _id: user.id, accountname: user.accountname, logined: true, admin: user.isAdmin })
                 } else {
                     callback({ code: '2', msg: '用户名或密码不正确' })
                 }

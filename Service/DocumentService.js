@@ -70,7 +70,7 @@ exports.create = (req, callback) => {
         updatePart.title = data.title;
         updatePart.subtitle = data.subtitle;
         updatePart.content = data.content;
-        updatePart.typenameid = data.typenameid;
+        updatePart.typename = data.typename;
         updatePart.releaseTime = data.releaseTime;
     }
     if (typeof (data.draft) != 'undefined') {
@@ -80,7 +80,7 @@ exports.create = (req, callback) => {
         updatePart.top = data.top;
     }
     updatePart.lastEditTime = new Date().toISOString();
-    updatePart.lastEditPerson = req.session._id;
+    updatePart.lastEditPerson = req.session.accountname;
 
     if (data._id) {
         //修改文章
@@ -102,12 +102,12 @@ exports.create = (req, callback) => {
                 new Document({
                     title: data.title,
                     subtitle: data.subtitle,
-                    typenameid: data.typenameid,
+                    typename: data.typename,
                     content: data.content,
                     releaseTime: data.releaseTime,
                     draft: data.draft,
-                    accountname: req.session._id,
-                    lastEditPerson:req.session._id
+                    accountname: req.session.accountname,
+                    lastEditPerson:req.session.accountname
                 }).save(function (err, newdoc) {
                     if (err) { errfun(err) }
                     if (newdoc) {
@@ -127,9 +127,9 @@ exports.create = (req, callback) => {
 exports.listdraft = (req, callback) => {
     const data=req.query;
     if(data.draft=='true'){
-        data.accountname=req.session._id;
+        data.accountname=req.session.accountname;
     }
-    Document.find( data , 'title typenameid releaseTime count top', { sort: {  'top': -1 ,'releaseTime': -1} }, function (err, doc) {
+    Document.find( data , 'title typename releaseTime count top', { sort: {  'top': -1 ,'releaseTime': -1} }, function (err, doc) {
         if (err) { errfun(err) }
         callback(doc);
     });
@@ -166,12 +166,12 @@ exports.listdraft = (req, callback) => {
 //查找某篇文章
 
 exports.search = (data, callback) => {
-    Document.findById(data._id, function (err, doc) {
+    Document.findById(data._id,'title subtitle typename releaseTime content', function (err, doc) {
         if (err) { errfun(err) }
         if (doc) {
             Document.findByIdAndUpdate(data._id, { count: ++doc.count }, { new: true }, function (err1, newdoc) {
                 if (err1) { errfun(err) }
-                callback(newdoc);
+                callback(doc);
             })
         } else {
             callback(doc);

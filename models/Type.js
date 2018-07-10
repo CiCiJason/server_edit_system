@@ -5,20 +5,14 @@ var TypeSchema = new Schema({
     //类型名称
     typename: String,
     //创建人
-    accountname: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
+    accountname:String,
     //创建时间
     createTime: {
         type: Date,
         default: Date.now
     },
     //修改人
-    editaccountname: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
+    editaccountname: String,
     //修改时间
     lastEditTime: {
         type: Date,

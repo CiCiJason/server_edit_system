@@ -5,7 +5,7 @@ var DocumentSchema = new Schema({
     title: String,
     subtitle: {type:String,default:''},
     content: String,
-    typenameid:{
+    typename:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Type'
     },
@@ -30,20 +30,14 @@ var DocumentSchema = new Schema({
         default: Date.now
     },
     //创建人
-    accountname:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
+    accountname:String,
     //创建时间
     createTime: {
         type: Date,
         default: Date.now
     },
     //上次修改人
-    lastEditPerson: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
+    lastEditPerson: String,
     //上一次修改时间
     lastEditTime: {
         type: Date,
