@@ -18,9 +18,15 @@ router.get('/list',function (req,res,next) {
   //     return res.json(data);
   //   })
   // }
-  DocumentService.listdraft(req,function(data){
-    return res.json(data)
-  })
+  if(req.query.page){
+    DocumentService.list(req,function(data){
+      return res.json(data)
+    })
+  }else{
+    DocumentService.listdraft(req,function(data){
+      return res.json(data)
+    })
+  }
 })
 
 

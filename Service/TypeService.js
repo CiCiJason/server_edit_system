@@ -42,15 +42,16 @@ exports.update = (req, callback) => {
             if (doc.typename == data.newtype) {
                 callback({ code: '1', msg: '新编辑文档类型名称与原名称一致，请重新输入' });
             } else {
-                Type.findByIdAndUpdate(data._id, { $set: { typename: data.newtype, lastEditTime: new Date().toISOString() ,editaccountname:req.session.accountname} }, { new: true }, (err, doc) => {
-                    if (err) { console.log(err); }
-                    if (doc) {
-                        callback({ code: '0', msg: '修改成功' });
-                    }
-                });
-                // doc.update({typename: data.newtype, lastEditTime: new Date().toISOString() ,editaccountname:req.session._id},(err1,newdoc)=>{
-                //     callback({ code: '0', msg: '修改成功' });
+                // Type.findByIdAndUpdate(data._id, { $set: { typename: data.newtype, lastEditTime: new Date().toISOString() ,editaccountname:req.session.accountname} }, { new: true }, (err1, doc2) => {
+                //     if (err1) { console.log(err2); }
+                //     if (doc2) {
+                //         callback({ code: '0', msg: '修改成功' });
+                //     }
                 // });
+                doc.update({typename: data.newtype, lastEditTime: new Date().toISOString() ,editaccountname:req.session.accountname}, (err1, doc2) => {
+                    if (err1) { console.log(err2); }
+                    callback({ code: '0', msg: '修改成功' });
+                });
             }
         } else {
             callback({ code: '2', msg: '不存在这样的文档类型，请重新输入' });
