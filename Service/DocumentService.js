@@ -72,7 +72,10 @@ exports.create = (req, callback) => {
         updatePart.content = data.content;
         updatePart.typename = data.typename;
         updatePart.releaseTime = data.releaseTime;
+        updatePart.coverImg = data.coverImg;
+        updatePart.summary=data.summary;
     }
+
     if (typeof (data.draft) != 'undefined') {
         updatePart.draft = data.draft;
     }
@@ -104,6 +107,8 @@ exports.create = (req, callback) => {
                     subtitle: data.subtitle,
                     typename: data.typename,
                     content: data.content,
+                    coverImg:data.coverImg,
+                    summary:data.summary,
                     releaseTime: data.releaseTime,
                     draft: data.draft,
                     accountname: req.session.accountname,
@@ -136,17 +141,17 @@ exports.listdraft = (req, callback) => {
 //加入分页之后
 
 exports.list=(req,callback)=>{
-    const queryConf=JSON.parse(req.query.queryConf);
+    const queryConf=typeof(req.query.queryConf)=='string'?JSON.parse(req.query.queryConf):req.query.queryConf;
     queryConf.typename=='all'? delete queryConf.typename:queryConf.typename;
     const callbackObj={};
     Document.count(queryConf,function (err,counts) {
         if(err)errfun(err)
         if(counts){
-            const page=JSON.parse(req.query.page);
-            const limit=page.itemPerPage;
-            const currentPage=page.currentPage||1;
+            const page=typeof(req.query.page)=='string'?JSON.parse(req.query.page):req.query.page;
+            const limit=Number(page.itemsPerPage);
+            const currentPage=Number(page.currentPage)||1;
             const skip=limit*currentPage-limit;
-            Document.find(queryConf,'title typename releaseTime count top',{sort: {  'top': -1 ,'releaseTime': -1},skip:skip,limit:limit},function(err1,doc1){
+            Document.find(queryConf,'title typename releaseTime count top coverImg summary',{sort: {  'top': -1 ,'releaseTime': -1},skip:skip,limit:limit},function(err1,doc1){
                 if(err1)errfun(err1)
                 callbackObj.totalItems=counts;
                 callbackObj.documents=doc1;
@@ -165,7 +170,7 @@ exports.list=(req,callback)=>{
 //查找某篇文章
 
 exports.search = (data, callback) => {
-    Document.findById(data._id,'title subtitle typename releaseTime content', function (err, doc) {
+    Document.findById(data._id,'title subtitle typename releaseTime content count coverImg summary', function (err, doc) {
         if (err) { errfun(err) }
         if (doc) {
             Document.findByIdAndUpdate(data._id, { count: ++doc.count }, { new: true }, function (err1, newdoc) {

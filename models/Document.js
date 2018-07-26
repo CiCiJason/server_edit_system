@@ -5,6 +5,8 @@ var DocumentSchema = new Schema({
     title: String,
     subtitle: {type:String,default:''},
     content: String,
+    coverImg:{type:String,default:''},
+    summary:{type:String,default:''},
     typename:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Type'
