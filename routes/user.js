@@ -55,5 +55,19 @@ router.put('/repassword', function (req, res, next) {
   })
 })
 
+//设置管理员
+router.put('/setAdmin', function (req, res, next) {
+  UserService.setAdmin(req.body, function (data) {
+    return res.json(data);
+  })
+})
+
+//取消管理员
+router.put('/cancelAdmin', function (req, res, next) {
+  UserService.cancelAdmin(req.body, function (data) {
+    return res.json(data);
+  })
+})
+
 
 module.exports = router;
